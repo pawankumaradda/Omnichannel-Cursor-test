@@ -12,10 +12,10 @@
     "preview": "vite preview"
   },
   "engines": {
-    "node": "25.x"
+    "node": "22.x"
   },
   "dependencies": {
-    "express": "^5.2.1",
+    "express": "^4.21.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },
