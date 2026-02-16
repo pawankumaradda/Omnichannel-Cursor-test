@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import Sidebar from './components/Sidebar';
 import ChatWindow from './components/ChatWindow';
-import MetricsPanel from './components/MetricsPanel';
 import scenarios from './data/scenarios';
 import './App.css';
 
@@ -17,7 +16,6 @@ function App() {
         onSelect={setActiveId}
       />
       <ChatWindow scenario={activeScenario} />
-      <MetricsPanel scenario={activeScenario} />
     </div>
   );
 }

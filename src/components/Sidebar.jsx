@@ -1,108 +1,52 @@
-import { useState } from 'react';
-
 export default function Sidebar({ scenarios, activeId, onSelect }) {
-  const [search, setSearch] = useState('');
-
-  const filtered = scenarios.filter(
-    (s) =>
-      s.title.toLowerCase().includes(search.toLowerCase()) ||
-      s.tags.some((t) => t.toLowerCase().includes(search.toLowerCase()))
-  );
-
-  const sentimentColor = {
-    positive: '#22c55e',
-    neutral: '#eab308',
-    negative: '#f97316',
-    'very-negative': '#ef4444',
-  };
-
-  const priorityColor = {
-    Low: '#94a3b8',
-    Medium: '#eab308',
-    High: '#f97316',
-    Urgent: '#ef4444',
+  const iconMap = {
+    lock: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+      </svg>
+    ),
+    'lock-open': (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+        <path d="M7 11V7a5 5 0 0 1 9.9-1" />
+      </svg>
+    ),
+    briefcase: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+      </svg>
+    ),
+    support: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
+      </svg>
+    ),
   };
 
   return (
     <aside className="sidebar">
       <div className="sidebar-header">
-        <div className="logo">
-          <span className="logo-icon">⚡</span>
-          <div>
-            <h1>OmniChannel</h1>
-            <span className="logo-sub">Success Agent</span>
-          </div>
-        </div>
-        <div className="search-box">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="11" cy="11" r="8" />
-            <path d="m21 21-4.35-4.35" />
-          </svg>
-          <input
-            type="text"
-            placeholder="Search scenarios..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
+        <span className="sidebar-label">SIMULATE SCENARIO</span>
       </div>
-
-      <div className="scenario-list">
-        {filtered.map((scenario) => (
+      <nav className="scenario-list">
+        {scenarios.map((scenario) => (
           <button
             key={scenario.id}
-            className={`scenario-card ${activeId === scenario.id ? 'active' : ''}`}
+            className={`scenario-item ${activeId === scenario.id ? 'active' : ''}`}
             onClick={() => onSelect(scenario.id)}
           >
-            <div className="scenario-card-header">
-              <span className="scenario-icon">{scenario.icon}</span>
-              <div className="scenario-meta">
-                <span
-                  className="priority-badge"
-                  style={{ background: priorityColor[scenario.priority] }}
-                >
-                  {scenario.priority}
-                </span>
-                <span
-                  className="sentiment-dot"
-                  style={{ background: sentimentColor[scenario.sentiment] }}
-                  title={scenario.sentiment}
-                />
-              </div>
+            <div className="scenario-item-icon">
+              {iconMap[scenario.icon] || iconMap.lock}
             </div>
-            <h3>{scenario.title}</h3>
-            <p>{scenario.description}</p>
-            <div className="scenario-tags">
-              {scenario.tags.map((tag) => (
-                <span key={tag} className="tag">{tag}</span>
-              ))}
-            </div>
-            <div className="scenario-channel">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-              </svg>
-              {scenario.channel}
+            <div className="scenario-item-text">
+              <span className="scenario-item-title">{scenario.title}</span>
+              <span className="scenario-item-desc">{scenario.description}</span>
             </div>
           </button>
         ))}
-      </div>
-
-      <div className="sidebar-footer">
-        <div className="stats">
-          <div className="stat">
-            <span className="stat-value">{scenarios.length}</span>
-            <span className="stat-label">Scenarios</span>
-          </div>
-          <div className="stat">
-            <span className="stat-value">4</span>
-            <span className="stat-label">Channels</span>
-          </div>
-          <div className="stat">
-            <span className="stat-value">98%</span>
-            <span className="stat-label">CSAT</span>
-          </div>
-        </div>
-      </div>
+      </nav>
     </aside>
   );
 }
